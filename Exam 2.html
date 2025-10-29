@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M+ Candidate Selection Exam: Elements of AI (60 Minutes)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        /* Personal Details Section Styling */
+        #pre-exam-form h2 {
+            text-align: center;
+            color: #007bff;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        /* Exam Instructions */
+        #exam-instructions {
+            background-color: #e2f0fb;
+            border-left: 5px solid #007bff;
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }
+        #exam-instructions h3 {
+            color: #007bff;
+            margin-top: 0;
+        }
+        #exam-instructions ul {
+            list-style: disc;
+            margin-left: 20px;
+        }
+        #exam-instructions li {
+            margin-bottom: 8px;
+        }
+
+        #start-button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            width: 100%;
+            margin-top: 20px;
+        }
+        #start-button:hover {
+            background-color: #218838;
+        }
+
+        /* Quiz and Timer Styling */
+        #quiz-section {
+            display: none; /* Hidden until start button is clicked */
+        }
+        #timer-display {
+            background-color: #ffc107;
+            color: #333;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 1.4em;
+            text-align: center;
+            font-weight: bold;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .question p {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        label:hover {
+            background-color: #f0f0f0;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        #submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+        #submit-button:hover {
+            background-color: #0056b3;
+        }
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #007bff;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.3em;
+            display: none;
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #f8d7da !important;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Camera Monitoring Styling */
+        #camera-monitor {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        #camera-monitor p {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        #camera-feed {
+            width: 100%;
+            max-width: 320px; /* Smaller size for monitoring feel */
+            height: auto;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            transform: scaleX(-1); /* Mirror effect for natural webcam feel */
+            display: block;
+            margin: 10px auto 0;
+        }
+        #camera-status {
+            color: #dc3545;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>M+ Candidate Selection: Elements of AI Exam</h1>
+</div>
+
+<div class="container">
+    
+    <form id="pre-exam-form">
+        <h2>Candidate Information (Mandatory)</h2>
+        <div class="input-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="input-group">
+            <label for="email">Email ID:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="input-group">
+            <label for="mobile">Mobile Number:</label>
+            <input type="tel" id="mobile" name="mobile" pattern="[0-9]{10,15}" required>
+            <small>Enter a valid phone number (e.g., 10-15 digits)</small>
+        </div>
+
+        <div id="exam-instructions">
+            <h3>Exam Instructions:</h3>
+            <ul>
+                <li>This exam consists of 50 multiple-choice questions based on the Elements of AI course.</li>
+                <li>You have a total of **60 minutes** to complete the exam once started.</li>
+                <li>**Scoring:**
+                    <ul>
+                        <li>Each correct answer: **+2 marks**</li>
+                        <li>Each wrong answer: **-0.5 marks** (Negative Marking)</li>
+                        <li>Unanswered questions: **0 marks**</li>
+                    </ul>
+                </li>
+                <li>Your camera will be activated to ensure fair conduct of the exam.</li>
+                <li>The timer will start immediately after you click "Start Exam".</li>
+            </ul>
+        </div>
+
+        <button type="submit" id="start-button">Start Exam (60 Minutes)</button>
+    </form>
+
+    <div id="quiz-section">
+        <div id="timer-display">Time Remaining: 60:00</div>
+
+        <div id="camera-monitor">
+            <p><strong>PROCTORING ACTIVE:</strong> Your activity is being monitored via webcam.</p>
+            <video id="camera-feed" autoplay playsinline></video>
+            <p id="camera-status">Camera status: Initializing...</p>
+        </div>
+        
+        <form id="quizForm">
+            <div class="question" id="q1">
+                <p>1. Which of the following best defines Artificial Intelligence (AI)?</p>
+                <label><input type="radio" name="q1" value="A"> A computer that can perfectly mimic human emotion.</label>
+                <label><input type="radio" name="q1" value="B"> A machine that can perform tasks that typically require human intelligence.</label>
+                <label><input type="radio" name="q1" value="C"> Any computer program written in Python.</label>
+                <label><input type="radio" name="q1" value="D"> A database that stores vast amounts of information.</label>
+            </div>
+            <div class="question" id="q2">
+                <p>2. What is the name of the test designed to determine if a machine can exhibit intelligent behavior indistinguishable from that of a human?</p>
+                <label><input type="radio" name="q2" value="A"> The Dartmouth Conference</label>
+                <label><input type="radio" name="q2" value="B"> The Lovelace Test</label>
+                <label><input type="radio" name="q2" value="C"> The Turing Test</label>
+                <label><input type="radio" name="q2" value="D"> The Intelligence Quotient (IQ) Test</label>
+            </div>
+            <div class="question" id="q3">
+                <p>3. What is **Weak AI** (or Narrow AI)?</p>
+                <label><input type="radio" name="q3" value="A"> AI that can handle any intellectual task a human can.</label>
+                <label><input type="radio" name="q3" value="B"> AI designed and trained to perform a specific, limited task.</label>
+                <label><input type="radio" name="q3" value="C"> AI that is inherently less powerful than traditional computing.</label>
+                <label><input type="radio" name="q3" value="D"> AI that can pass the Turing Test.</label>
+            </div>
+            <div class="question" id="q4">
+                <p>4. What subfield of AI focuses on enabling systems to learn from data without being explicitly programmed?</p>
+                <label><input type="radio" name="q4" value="A"> Expert Systems</label>
+                <label><input type="radio" name="q4" value="B"> Machine Learning (ML)</label>
+                <label><input type="radio" name="q4" value="C"> Symbolic Logic</label>
+                <label><input type="radio" name="q4" value="D"> Computational Linguistics</label>
+            </div>
+            <div class="question" id="q5">
+                <p>5. In **Supervised Learning**, what must the training data contain?</p>
+                <label><input type="radio" name="q5" value="A"> Only unlabeled data points.</label>
+                <label><input type="radio" name="q5" value="B"> Rewards and penalties.</label>
+                <label><input type="radio" name="q5" value="C"> Input features paired with the correct output label (ground truth).</label>
+                <label><input type="radio" name="q5" value="D"> Data from two different classes only.</label>
+            </div>
+            <div class="question" id="q6">
+                <p>6. **Clustering** is a technique primarily associated with which type of machine learning?</p>
+                <label><input type="radio" name="q6" value="A"> Supervised Learning</label>
+                <label><input type="radio" name="q6" value="B"> Reinforcement Learning</label>
+                <label><input type="radio" name="q6" value="C"> Unsupervised Learning</label>
+                <label><input type="radio" name="q6" value="D"> Deep Learning</label>
+            </div>
+            <div class="question" id="q7">
+                <p>7. What is the goal of an agent in **Reinforcement Learning**?</p>
+                <label><input type="radio" name="q7" value="A"> To find hidden structures in unlabeled data.</label>
+                <label><input type="radio" name="q7" value="B"> To maximize the accumulated reward.</label>
+                <label><input type="radio" name="q7" value="C"> To classify data into two distinct categories.</label>
+                <label><input type="radio" name="q7" value="D"> To fit a line to a set of data points.</label>
+            </div>
+            <div class="question" id="q8">
+                <p>8. Predicting whether a customer **will or will not** click on an ad is an example of a _____ problem.</p>
+                <label><input type="radio" name="q8" value="A"> Regression</label>
+                <label><input type="radio" name="q8" value="B"> Clustering</label>
+                <label><input type="radio" name="q8" value="C"> Classification</label>
+                <label><input type="radio" name="q8" value="D"> Dimensionality Reduction</label>
+            </div>
+            <div class="question" id="q9">
+                <p>9. A **Perceptron** is the simplest form of what type of AI structure?</p>
+                <label><input type="radio" name="q9" value="A"> Decision Tree</label>
+                <label><input type="radio" name="q9" value="B"> Expert System</label>
+                <label><input type="radio" name="q9" value="C"> Neural Network</label>
+                <label><input type="radio" name="q9" value="D"> Knowledge Base</label>
+            </div>
+            <div class="question" id="q10">
+                <p>10. **Deep Learning** is a subset of Machine Learning that is characterized by:</p>
+                <label><input type="radio" name="q10" value="A"> The use of classical statistical methods.</label>
+                <label><input type="radio" name="q10" value="B"> Neural networks with many (multiple) hidden layers.</label>
+                <label><input type="radio" name="q10" value="C"> Systems that require very little training data.</label>
+                <label><input type="radio" name="q10" value="D"> Algorithms that rely on symbolic logic.</label>
+            </div>
+            <div class="question" id="q11"><p>11. In AI search algorithms, what does **state space** refer to?</p><label><input type="radio" name="q11" value="A"> The total memory used by the algorithm.</label><label><input type="radio" name="q11" value="B"> The set of all possible configurations/situations an agent can be in.</label><label><input type="radio" name="q11" value="C"> The final, goal position only.</label><label><input type="radio" name="q11" value="D"> The number of steps taken.</label></div>
+            <div class="question" id="q12"><p>12. Which search algorithm explores all nodes at the present depth level before moving on to nodes at the next depth level?</p><label><input type="radio" name="q12" value="A"> Depth-First Search (DFS)</label><label><input type="radio" name="q12" value="B"> Breadth-First Search (BFS)</label><label><input type="radio" name="q12" value="C"> A* Search</label><label><input type="radio" name="q12" value="D"> Hill Climbing</label></div>
+            <div class="question" id="q13"><p>13. A **heuristic function** (h(n)) is used in search algorithms to:</p><label><input type="radio" name="q13" value="A"> Determine if the goal state is reached.</label><label><input type="radio" name="q13" value="B"> Estimate the cost from the current state to the goal state.</label><label><input type="radio" name="q13" value="C"> Keep track of visited nodes.</label><label><input type="radio" name="q13" value="D"> Calculate the actual cost from the start state.</label></div>
+            <div class="question" id="q14"><p>14. **A* search** is considered an informed search algorithm because it uses:</p><label><input type="radio" name="q14" value="A"> Random chance.</label><label><input type="radio" name="q14" value="B"> Both the cost so far and a heuristic estimate.</label><label><input type="radio" name="q14" value="C"> Only the cost so far.</label><label><input type="radio" name="q14" value="D"> Only the shortest path.</label></div>
+            <div class="question" id="q15"><p>15. Which of the following is NOT a characteristic of a well-defined AI problem?</p><label><input type="radio" name="q15" value="A"> Initial state.</label><label><input type="radio" name="q15" value="B"> Set of possible actions.</label><label><input type="radio" name="q15" value="C"> An ambiguous goal test.</label><label><input type="radio" name="q15" value="D"> Path cost function.</label></div>
+
+            <div class="question" id="q16"><p>16. When training an ML model, the data is typically split into three sets. Which set is used for the final unbiased evaluation?</p><label><input type="radio" name="q16" value="A"> Training Set</label><label><input type="radio" name="q16" value="B"> Testing Set</label><label><input type="radio" name="q16" value="C"> Validation Set</label><label><input type="radio" name="q16" value="D"> Hyperparameter Set</label></div>
+            <div class="question" id="q17"><p>17. What is **Overfitting** in Machine Learning?</p><label><input type="radio" name="q17" value="A"> The model performs poorly on both training and test data.</label><label><input type="radio" name="q17" value="B"> The model learns the training data and noise too well, performing poorly on new data.</label><label><input type="radio" name="q17" value="C"> The training data is too small to be useful.</label><label><input type="radio" name="q17" value="D"> The model is too simple to capture the underlying patterns.</label></div>
+            <div class="question" id="q18"><p>18. Which term refers to the inputs used to predict the output in a supervised learning model?</p><label><input type="radio" name="q18" value="A"> Labels</label><label><input type="radio" name="q18" value="B"> Loss Functions</label><label><input type="radio" name="q18" value="C"> Features</label><label><input type="radio" name="q18" value="D"> Hyperparameters</label></div>
+            <div class="question" id="q19"><p>19. Which metric is most appropriate for evaluating a **Regression** model?</p><label><input type="radio" name="q19" value="A"> Accuracy</label><label><input type="radio" name="q19" value="B"> Precision</label><label><input type="radio" name="q19" value="C"> Mean Squared Error (MSE)</label><label><input type="radio" name="q19" value="D"> F1-Score</label></div>
+            <div class="question" id="q20"><p>20. In an image classification task, what is the **label**?</p><label><input type="radio" name="q20" value="A"> The image file size.</label><label><input type="radio" name="q20" value="B"> The category/name of the object in the image (e.g., "cat", "dog").</label><label><input type="radio" name="q20" value="C"> The time it takes to process the image.</label><label><input type="radio" name="q20" value="D"> The pixel values of the image.</label></div>
+
+            <div class="question" id="q21"><p>21. What component of a neural network determines the output of a neuron given its input?</p><label><input type="radio" name="q21" value="A"> The Loss Function</label><label><input type="radio" name="q21" value="B"> The Activation Function</label><label><input type="radio" name="q21" value="C"> The Learning Rate</label><label><input type="radio" name="q21" value="D"> The Backpropagation Algorithm</label></div>
+            <div class="question" id="q22"><p>22. In a feedforward neural network, the flow of information is:</p><label><input type="radio" name="q22" value="A"> Input Layer → Output Layer → Hidden Layer</label><label><input type="radio" name="q22" value="B"> Input Layer → Hidden Layers → Output Layer</label><label><input type="radio" name="q22" value="C"> Output Layer → Hidden Layers → Input Layer</label><label><input type="radio" name="q22" value="D"> Circular (Recurrent)</label></div>
+            <div class="question" id="q23"><p>23. What does the term **"weights"** represent in a neural network?</p><label><input type="radio" name="q23" value="A"> The number of layers.</label><label><input type="radio" name="q23" value="B"> The strength of the connection between neurons.</label><label><input type="radio" name="q23" value="C"> The size of the training dataset.</label><label><input type="radio" name="q23" value="D"> The maximum possible score.</label></div>
+            <div class="question" id="q24"><p>24. The process of adjusting the weights and biases in a neural network based on the error is called:</p><label><input type="radio" name="q24" value="A"> Forward Propagation</label><label><input type="radio" name="q24" value="B"> Feature Scaling</label><label><input type="radio" name="q24" value="C"> Backpropagation</label><label><input type="radio" name="q24" value="D"> Hyperparameter Tuning</label></div>
+            <div class="question" id="q25"><p>25. Convolutional Neural Networks (CNNs) are primarily used for which type of task?</p><label><input type="radio" name="q25" value="A"> Time-series forecasting</label><label><input type="radio" name="q25" value="B"> Image and video analysis</label><label><input type="radio" name="q25" value="C"> Text generation</label><label><input type="radio" name="q25" value="D"> Reinforcement learning games</label></div>
+
+            <div class="question" id="q26"><p>26. What is the main concern regarding **algorithmic bias** in AI systems?</p><label><input type="radio" name="q26" value="A"> It makes the training process too slow.</label><label><input type="radio" name="q26" value="B"> It can lead to unfair or discriminatory outcomes against certain groups.</label><label><input type="radio" name="q26" value="C"> It requires too many neurons in the network.</label><label><input type="radio" name="q26" value="D"> It only happens in unsupervised learning models.</label></div>
+            <div class="question" id="q27"><p>27. The ability of an AI system to be understood by humans, explaining *why* it made a certain decision, is known as:</p><label><input type="radio" name="q27" value="A"> General AI</label><label><input type="radio" name="q27" value="B"> Data Augmentation</label><label><input type="radio" name="q27" value="C"> Explainable AI (XAI)</label><label><input type="radio" name="q27" value="D"> Quantum Computing</label></div>
+            <div class="question" id="q28"><p>28. AI applications in job automation primarily affect which sector?</p><label><input type="radio" name="q28" value="A"> Only highly technical research positions.</label><label><input type="radio" name="q28" value="B"> Only manual labor positions.</label><label><input type="radio" name="q28" value="C"> Roles involving repetitive or data-driven tasks (both manual and intellectual).</label><label><input type="radio" name="q28" value="D"> Only roles requiring creativity.</label></div>
+            <div class="question" id="q29"><p>29. Why is **data privacy** a critical ethical consideration for AI?</p><label><input type="radio" name="q29" value="A"> Because AI models cannot function without private data.</label><label><input type="radio" name="q29" value="B"> Because large-scale AI often relies on collecting and analyzing sensitive personal data.</label><label><input type="radio" name="q29" value="C"> Because private data makes the model overfit.</label><label><input type="radio" name="q29" value="D"> Because it violates all current laws.</label></div>
+            <div class="question" id="q30"><p>30. The concept that AI should be developed and used in a way that respects human values and rights is often referred to as:</p><label><input type="radio" name="q30" value="A"> Algorithmic Complexity</label><label><input type="radio" name="q30" value="B"> AI Ethics and Governance</label><label><input type="radio" name="q30" value="C"> Expert System Logic</label><label><input type="radio" name="q30" value="D"> Data Splitting</label></div>
+
+            <div class="question" id="q31"><p>31. Who is considered one of the founding fathers of AI and coined the term "Artificial Intelligence" in 1955?</p><label><input type="radio" name="q31" value="A"> Alan Turing</label><label><input type="radio" name="q31" value="B"> John McCarthy</label><label><input type="radio" name="q31" value="C"> Marvin Minsky</label><label><input type="radio" name="q31" value="D"> Geoffrey Hinton</label></div>
+            <div class="question" id="q32"><p>32. An **Expert System** is an AI program designed to:</p><label><input type="radio" name="q32" value="A"> Learn new skills independently.</label><label><input type="radio" name="q32" value="B"> Mimic the decision-making ability of a human expert.</label><label><input type="radio" name="q32" value="C"> Predict stock market prices using regression.</label><label><input type="radio" name="q32" value="D"> Generate creative text and images.</label></div>
+            <div class="question" id="q33"><p>33. The principle that computers can process information to simulate human thought is known as the:</p><label><input type="radio" name="q33" value="A"> Computational Theory of Mind</label><label><input type="radio" name="q33" value="B"> Law of Thermodynamics</label><label><input type="radio" name="q33" value="C"> Occam's Razor</label><label><input type="radio" name="q33" value="D"> Principle of Least Action</label></div>
+            <div class="question" id="q34"><p>34. Which of these is a common application of **Natural Language Processing (NLP)**?</p><label><input type="radio" name="q34" value="A"> Object recognition in photos</label><label><input type="radio" name="q34" value="B"> Speech translation</label><label><input type="radio" name="q34" value="C"> Predicting a house price</label><label><input type="radio" name="q34" value="D"> Controlling a robotic arm</label></div>
+            <div class="question" id="q35"><p>35. The **Singularity** is a hypothetical point in time where:</p><label><input type="radio" name="q35" value="A"> All AI is shut down permanently.</label><label><input type="radio" name="q35" value="B"> AI exceeds human intelligence and begins self-improvement.</label><label><input type="radio" name="q35" value="C"> The first functional computer is built.</label><label><input type="radio" name="q35" value="D"> Neural networks are limited to one layer.</label></div>
+
+            <div class="question" id="q36"><p>36. What is the primary purpose of **cross-validation** in machine learning?</p><label><input type="radio" name="q36" value="A"> To speed up the model training time.</label><label><input type="radio" name="q36" value="B"> To ensure the model is evaluated on all parts of the data, reducing reliance on a single split.</label><label><input type="radio" name="q36" value="C"> To convert numerical data to categorical data.</label><label><input type="radio" name="q36" value="D"> To reduce the total number of features.</label></div>
+            <div class="question" id="q37"><p>37. A **Decision Tree** model makes predictions by:</p><label><input type="radio" name="q37" value="A"> Calculating a weighted sum of inputs.</label><label><input type="radio" name="q37" value="B"> Following a series of conditional (if/then) rules based on feature values.</label><label><input type="radio" name="q37" value="C"> Moving an agent in an environment to maximize reward.</label><label><input type="radio" name="q37" value="D"> Grouping unlabeled data points.</label></div>
+            <div class="question" id="q38"><p>38. If a classification model has **high precision** but **low recall**, what does that mean?</p><label><input type="radio" name="q38" value="A"> It correctly finds most of the actual positive cases.</label><label><input type="radio" name="q38" value="B"> It makes many false positive predictions.</label><label><input type="radio" name="q38" value="C"> When it predicts positive, it is usually correct, but it misses many actual positive cases.</label><label><input type="radio" name="q38" value="D"> It performs equally well on all types of data.</label></div>
+            <div class="question" id="q39"><p>39. Which algorithm is most commonly used for clustering?</p><label><input type="radio" name="q39" value="A"> Linear Regression</label><label><input type="radio" name="q39" value="B"> K-Nearest Neighbors (KNN)</label><label><input type="radio" name="q39" value="C"> K-Means</label><label><input type="radio" name="q39" value="D"> Support Vector Machine (SVM)</label></div>
+            <div class="question" id="q40"><p>40. What is a **hyperparameter** in machine learning?</p><label><input type="radio" name="q40" value="A"> A parameter whose value is learned by the model during training.</label><label><input type="radio" name="q40" value="B"> A parameter whose value is set *before* the training process begins.</label><label><input type="radio" name="q40" value="C"> The final output of the model.</label><label><input type="radio" name="q40" value="D"> The size of the dataset.</label></div>
+
+            <div class="question" id="q41"><p>41. **Computer Vision** is the field of AI that enables computers to:</p><label><input type="radio" name="q41" value="A"> Understand and generate human language.</label><label><input type="radio" name="q41" value="B"> Interpret and act on visual information from the world.</label><label><input type="radio" name="q41" value="C"> Solve mathematical optimization problems.</label><label><input type="radio" name="q41" value="D"> Control physical robots in a factory.</label></div>
+            <div class="question" id="q42"><p>42. Which type of neural network is best suited for processing sequential data like text or speech?</p><label><input type="radio" name="q42" value="A"> Feedforward Networks</label><label><input type="radio" name="q42" value="B"> Convolutional Neural Networks (CNN)</label><label><input type="radio" name="q42" value="C"> Recurrent Neural Networks (RNN)</label><label><input type="radio" name="q42" value="D"> Generative Adversarial Networks (GAN)</label></div>
+            <div class="question" id="q43"><p>43. **Generative AI** models, like those used for image creation or text writing, are primarily focused on:</p><label><input type="radio" name="q43" value="A"> Classifying existing data.</label><label><input type="radio" name="q43" value="B"> Creating new, original content.</label><label><input type="radio" name="q43" value="C"> Finding optimal paths in a maze.</label><label><input type="radio" name="q43" value="D"> Calculating probability distributions.</label></div>
+            <div class="question" id="q44"><p>44. What is a **chatbot**?</p><label><input type="radio" name="q44" value="A"> A type of supervised learning algorithm.</label><label><input type="radio" name="q44" value="B"> A computer program designed to simulate conversation with human users.</label><label><input type="radio" name="q44" value="C"> A specific metric for model performance.</label><label><input type="radio" name="q44" value="D"> The dataset used for training an ML model.</label></div>
+            <div class="question" id="q45"><p>45. **AlphaGo**, the program that defeated a human champion in Go, is a famous example of AI using which technique?</p><label><input type="radio" name="q45" value="A"> Unsupervised Clustering</label><label><input type="radio" name="q45" value="B"> Linear Regression</label><label><input type="radio" name="q45" value="C"> Reinforcement Learning</label><label><input type="radio" name="q45" value="D"> Symbolic Logic</label></div>
+
+            <div class="question" id="q46"><p>46. What does **GPU** stand for, and why is it essential for Deep Learning?</p><label><input type="radio" name="q46" value="A"> General Processing Unit; it handles sequential tasks efficiently.</label><label><input type="radio" name="q46" value="B"> Graphics Processing Unit; it is highly efficient at parallel computation needed for training large NNs.</label><label><input type="radio" name="q46" value="C"> Good Performance Unit; it guarantees a high accuracy score.</label><label><input type="radio" name="q46" value="D"> Geographic Positioning Unit; it enables location-based AI.</label></div>
+            <div class="question" id="q47"><p>47. What is the fundamental ethical concern addressed by the **European Union's AI Act**?</p><label><input type="radio" name="q47" value="A"> Limiting the cost of AI software.</label><label><input type="radio" name="q47" value="B"> Establishing a regulatory framework based on the risk level of AI systems.</label><label><input type="radio" name="q47" value="C"> Mandating the use of Python for all AI development.</label><label><input type="radio" name="q47" value="D"> Forcing companies to share all their training data.</label></div>
+            <div class="question" id="q48"><p>48. Which term describes the phenomenon where an AI system perpetuates or amplifies societal biases present in the training data?</p><label><input type="radio" name="q48" value="A"> Catastrophic Forgetting</label><label><input type="radio" name="q48" value="B"> Algorithmic Redundancy</label><label><input type="radio" name="q48" value="C"> Data Contamination</label><label><input type="radio" name="q48" value="D"> Social Bias Amplification</label></div>
+            <div class="question" id="q49"><p>49. A **Large Language Model (LLM)**, like the technology behind Gemini or ChatGPT, is primarily trained on:</p><label><input type="radio" name="q49" value="A"> Proprietary hardware blueprints.</label><label><input type="radio" name="q49" value="B"> Massive amounts of text data.</label><label><input type="radio" name="q49" value="C"> Financial market trading history.</label><label><input type="radio" name="q49" value="D"> Low-resolution image datasets.</label></div>
+            <div class="question" id="q50"><p>50. What is the primary role of an **Activation Function** in a neural network?</p><label><input type="radio" name="q50" value="A"> To calculate the loss.</label><label><input type="radio" name="q50" value="B"> To introduce non-linearity into the model.</label><label><input type="radio" name="q50" value="C"> To initialize the weights to zero.</label><label><input type="radio" name="q50" value="D"> To connect every neuron to every other neuron.</label></div>
+
+            <button type="submit" id="submit-button">Submit Exam & View Results</button>
+        </form>
+    </div>
+
+    <div id="results"></div>
+</div>
+
+<script>
+    const totalQuestions = 50;
+    const correctAnswers = {
+        q1: 'B', q2: 'C', q3: 'B', q4: 'B', q5: 'C',
+        q6: 'C', q7: 'B', q8: 'C', q9: 'C', q10: 'B',
+        q11: 'B', q12: 'B', q13: 'B', q14: 'B', q15: 'C',
+        q16: 'B', q17: 'B', q18: 'C', q19: 'C', q20: 'B',
+        q21: 'B', q22: 'B', q23: 'B', q24: 'C', q25: 'B',
+        q26: 'B', q27: 'C', q28: 'C', q29: 'B', q30: 'B',
+        q31: 'B', q32: 'B', q33: 'A', q34: 'B', q35: 'B',
+        q36: 'B', q37: 'B', q38: 'C', q39: 'C', q40: 'B',
+        q41: 'B', q42: 'C', q43: 'B', q44: 'B', q45: 'C',
+        q46: 'B', q47: 'B', q48: 'D', q49: 'B', q50: 'B'
+    };
+    const timerDisplay = document.getElementById('timer-display');
+    const quizSection = document.getElementById('quiz-section');
+    const preExamForm = document.getElementById('pre-exam-form');
+    const quizForm = document.getElementById('quizForm');
+    const resultsDiv = document.getElementById('results');
+    const cameraFeed = document.getElementById('camera-feed');
+    const cameraStatus = document.getElementById('camera-status');
+    const timeLimitSeconds = 60 * 60; // 60 minutes in seconds
+    let timeLeft = timeLimitSeconds;
+    let timerInterval;
+    let mediaStream = null;
+
+    // --- Camera Functions ---
+    async function startCamera() {
+        cameraStatus.textContent = 'Camera status: Requesting permission...';
+        try {
+            // Request video stream access
+            mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            cameraFeed.srcObject = mediaStream;
+            cameraStatus.textContent = 'Camera status: Live Monitoring Active ✅';
+            cameraStatus.style.color = '#28a745';
+        } catch (err) {
+            console.error('Error accessing camera: ', err);
+            cameraStatus.textContent = 'Camera status: DENIED. Please enable your camera for proctoring.';
+            cameraStatus.style.color = '#dc3545';
+        }
+    }
+
+    function stopCamera() {
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+            cameraFeed.srcObject = null;
+        }
+    }
+
+    // --- Timer Functions ---
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `Time Remaining: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("Time's up! The exam will now be submitted automatically.");
+                checkAnswers(true); // Auto-submit
+            }
+        }, 1000);
+    }
+
+    // --- Exam Flow Control ---
+    preExamForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Hide details form, show quiz section
+        preExamForm.style.display = 'none';
+        quizSection.style.display = 'block';
+
+        // Start Camera and Timer
+        startCamera();
+        startTimer();
+        alert("Exam started! You have 60 minutes. Your camera is now active.");
+        window.scrollTo(0, 0);
+    });
+
+    quizForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearInterval(timerInterval); // Stop timer on manual submit
+        stopCamera(); // Stop camera on submission
+        checkAnswers(false);
+    });
+
+    // --- Result Calculation and Display ---
+    function checkAnswers(isAutoSubmit) {
+        let rawScore = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let skippedCount = 0;
+
+        // Scoring rules: Correct (+2), Incorrect (-0.5), Skipped (0)
+        const correctPoints = 2.0;
+        const incorrectPenalty = -0.5;
+        
+        // Disable all inputs after submission
+        quizForm.querySelectorAll('input').forEach(input => input.disabled = true);
+        document.getElementById('submit-button').disabled = true;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+            const qName = `q${i}`;
+            const questionElement = document.getElementById(qName);
+            const selectedOption = document.querySelector(`input[name="${qName}"]:checked`);
+            const correctAnswer = correctAnswers[qName];
+            
+            // Clear previous feedback
+            questionElement.querySelectorAll('label').forEach(label => {
+                label.classList.remove('correct-answer', 'incorrect-answer');
+            });
+
+            if (selectedOption) {
+                const userSelection = selectedOption.value;
+                if (userSelection === correctAnswer) {
+                    rawScore += correctPoints;
+                    correctCount++;
+                } else {
+                    rawScore += incorrectPenalty;
+                    incorrectCount++;
+                    selectedOption.closest('label').classList.add('incorrect-answer');
+                }
+            } else {
+                skippedCount++;
+            }
+
+            // Highlight Correct Answer
+            questionElement.querySelectorAll('input[name="' + qName + '"]').forEach(input => {
+                if (input.value === correctAnswer) {
+                    input.closest('label').classList.add('correct-answer');
+                }
+            });
+        }
+
+        const maxScore = totalQuestions * correctPoints;
+        const percentage = (rawScore / maxScore) * 100;
+        const submitMethod = isAutoSubmit ? 'Auto-submitted due to time limit.' : 'Manually submitted.';
+
+        resultsDiv.innerHTML = `
+            <h2>Exam Completed!</h2>
+            <p><strong>Submission Status:</strong> ${submitMethod}</p>
+            <hr>
+            <p><strong>Total Correct Answers:</strong> ${correctCount} (${correctPoints} points each)</p>
+            <p><strong>Total Incorrect Answers:</strong> ${incorrectCount} (${incorrectPenalty} points each)</p>
+            <p><strong>Total Skipped Questions:</strong> ${skippedCount}</p>
+            <hr>
+            <p><strong>MAX POSSIBLE SCORE:</strong> ${maxScore.toFixed(2)}</p>
+            <p><strong>FINAL SCORE:</strong> <span style="font-size: 1.5em; color: ${rawScore >= (maxScore * 0.5) ? '#28a745' : '#dc3545'};">${rawScore.toFixed(2)}</span></p>
+            <p><strong>PERCENTAGE (based on Max Score):</strong> ${percentage.toFixed(2)}%</p>
+            <hr>
+            <p>Review the questions above: The correct answers are now highlighted in green, and your incorrect choices (if any) are highlighted in red.</p>
+        `;
+        resultsDiv.style.display = 'block';
+        resultsDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
